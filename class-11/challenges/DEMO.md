@@ -6,6 +6,10 @@ Scapy is a free and open-source tool used for packet manipulation programs. Scap
 
 Install scapy using the command `pip3 install scapy-python3`
 
+or
+
+Install scapy using the command `pip3 install scapy`
+
 **Scapy functions**
 
 - `ARP()`: This function allows us to create ARP packets (request or response)
