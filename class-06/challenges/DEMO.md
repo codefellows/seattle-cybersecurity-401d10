@@ -91,7 +91,7 @@ write_key()
 
 # load the previously generated key
 key = load_key()
-print("Key is " + str(key.decode('utf-8')))
+print("Key is : " + str(key.decode('utf-8')))
 
 message = "hello friend".encode()
 print("Plaintext is " + str(message.decode('utf-8')))

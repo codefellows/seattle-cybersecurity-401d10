@@ -75,59 +75,7 @@ Now that we created and Internet gateway, we need to create a route to the Inter
 - Continue to click on Action, then Edit Subnet Association.
 - Select `class-17-public-subnet` and click Save.
 
-### Part 3: Instance Deployment
-
-- Switch back to EC2 and launch the following instances:
-  - Ubuntu Server 20.04 LTS (HVM), SSD Volume Type to class-17-public-subnet
-    - In Step 3: Configure Instance Details, you can assign the instance to your new VPC and subnet under Network and Subnet dropdown menus.
-    - Remember to specify class-17-vpc-security-group in Step 6.
-    - AWS should warn you with something like this:
-
-      > Improve your instances' security. Your security group, class-17-vpc-security-group, is open to the world. Your instances may be accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses only. You can also open additional ports in your security group to facilitate access to the application or service you're running, e.g., HTTP (80) for web servers.
-
-      > Note: At this point you can test ping and SSH from Internet to this instance and it should work.
-
-    - Is this a concern, or does it fit with the goals of your cloud architecture?
-    - As a stretch goal, change the security group to only allow traffic from your computer's public IP address. Re-attempt launching the EC2 instance and see if this warning is cleared.
-
-  - Ubuntu Server 20.04 LTS (HVM), SSD Volume Type to class-17-private-subnet
-    - In Step 3: Configure Instance Details, you can assign the instance to your new VPC and subnet under Network and Subnet dropdown menus.
-    - AWS may warn you with the same prompt as before.
-    - Is this a concern, or does it fit with the goals of your cloud architecture?
-
-    > Note: At this point you can test pinging google from this instance and it should not work.
-
-### Part 4: NAT Gateway
-
-Normally, a NAT gateway translates IPs to allow communication between two networks. In AWS, however, a **NAT Gateway** is an object that provides communication between different subnets within a VPC.
-
-- Deploy a NAT gateway between your private and public subnet that allows the Ubuntu Server in your private subnet to access the internet without exposing itself. Here's some helpful documentation:
-
-  > To create a NAT gateway, you must specify the public subnet in which the NAT gateway should reside. For more information about public and private subnets, see Subnet routing. You must also specify an Elastic IP address to associate with the NAT gateway when you create it. The Elastic IP address cannot be changed after you associate it with the NAT Gateway. After you've created a NAT gateway, you must update the route table associated with one or more of your private subnets to point internet-bound traffic to the NAT gateway. This enables instances in your private subnets to communicate with the internet. -[AWS VPC](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
-
-- In the left navigation pane, choose NAT Gateways
-  - Choose Create NAT Gateway:
-    - Subnet: `class-17-public-subnet`
-    - Elastic IP Allocation ID:
-  - Choose Add Tag:
-    - Key: Name
-    - Value: `class-17-NAT`
-  - Choose Create a NAT Gateway
-
-### Part 5: Configure Route Table for NAT Gateway
-
-- In the left navigation pan, choose Route Tables and Create Route Table
-  - Apply a name tag:
-    - Name tag: `class-17-NAT-RT`
-    - VPC: `class-17-vpc`
-    - Choose Create and close.
-- Select the newly created route table, choose Action then Edit Route
-- Choose Add Route:
-  - Destination: `0.0.0.0/0`
-  - Target: `class-17-NAT`
-  - Choose Save Route.
-
-### Part 6: Security Group
+### Part 3: Security Groups
 
 A **security group** is a virtual firewall that determines what network traffic can pass into and out of your instance. You'll need to create, configure, and assign one to your new VPC. Whenever you launch a new EC2 instance, you'll need to check and make sure the correct security group is associated.
 
@@ -148,6 +96,58 @@ A **security group** is a virtual firewall that determines what network traffic 
 - If successful, you'll see "Security group (name) was created successfully." If you ran into issues, troubleshoot until resolved.
 
 - Include a screenshot of your "Inbound Rules" table in your submission. It should have exactly five entries.
+
+### Part 4: Instance Deployment
+
+- Switch back to EC2 and launch the following instances:
+  - Ubuntu Server 20.04 LTS (HVM), SSD Volume Type to `class-17-public-subnet`
+    - In Step 3: Configure Instance Details, you can assign the instance to your new VPC and subnet under Network and Subnet dropdown menus.
+    - Remember to specify `class-17-vpc-security-group` from step 3.
+    - AWS should warn you with something like this:
+
+      > Improve your instances' security. Your security group, class-17-vpc-security-group, is open to the world. Your instances may be accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses only. You can also open additional ports in your security group to facilitate access to the application or service you're running, e.g., HTTP (80) for web servers.
+
+      > Note: At this point you can test ping and SSH from Internet to this instance and it should work.
+
+    - Is this a concern, or does it fit with the goals of your cloud architecture?
+    - As a stretch goal, change the security group to only allow traffic from your computer's public IP address. Re-attempt launching the EC2 instance and see if this warning is cleared.
+
+  - Ubuntu Server 20.04 LTS (HVM), SSD Volume Type to `class-17-private-subnet`
+    - In Step 3: Configure Instance Details, you can assign the instance to your new VPC and subnet under Network and Subnet dropdown menus.
+    - AWS may warn you with the same prompt as before.
+    - Is this a concern, or does it fit with the goals of your cloud architecture?
+
+    > Note: At this point you can test pinging google from this instance and it should not work.
+
+### Part 5: NAT Gateway
+
+Normally, a NAT gateway translates IPs to allow communication between two networks. In AWS, however, a **NAT Gateway** is an object that provides communication between different subnets within a VPC.
+
+- Deploy a NAT gateway between your private and public subnet that allows the Ubuntu Server in your private subnet to access the internet without exposing itself. Here's some helpful documentation:
+
+  > To create a NAT gateway, you must specify the public subnet in which the NAT gateway should reside. For more information about public and private subnets, see Subnet routing. You must also specify an Elastic IP address to associate with the NAT gateway when you create it. The Elastic IP address cannot be changed after you associate it with the NAT Gateway. After you've created a NAT gateway, you must update the route table associated with one or more of your private subnets to point internet-bound traffic to the NAT gateway. This enables instances in your private subnets to communicate with the internet. -[AWS VPC](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
+
+- In the left navigation pane, choose NAT Gateways
+  - Choose Create NAT Gateway:
+    - Subnet: `class-17-public-subnet`
+    - Elastic IP Allocation ID:
+  - Choose Add Tag:
+    - Key: Name
+    - Value: `class-17-NAT`
+  - Choose Create a NAT Gateway
+
+### Part 6: Configure Route Table for NAT Gateway
+
+- In the left navigation pan, choose Route Tables and Create Route Table
+  - Apply a name tag:
+    - Name tag: `class-17-NAT-RT`
+    - VPC: `class-17-vpc`
+    - Choose Create and close.
+- Select the newly created route table, choose Action then Edit Route
+- Choose Add Route:
+  - Destination: `0.0.0.0/0`
+  - Target: `class-17-NAT`
+  - Choose Save Route.
 
 ### Part 7: Wrap Up
 
