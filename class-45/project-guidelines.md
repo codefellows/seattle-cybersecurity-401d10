@@ -1,6 +1,6 @@
 ## Scenario & Problem Domain
 
-Your MSSP has been contracted to perform a one-time adversary emulation engagement for [SimCorp](https://www.simcorp.com/), a financial asset management company. The CTO is concerned with the security posture of the company's cloud systems, after having already experienced sensitive data exposure as a result of misconfiguration of an employee's instance. Depending on the quality of your company's findings, SimCorp may consider a long term agreement to have your MSSP defend its cloud systems.
+Your MSSP has been contracted to perform a one-time adversary emulation engagement.
 
 You'll be divided into two teams, red and blue, for the full duration of the project. The red team will be tasked with discovering vulnerabilities on SimCorp systems and also exploiting them to gain access. The blue team will be overseeing the defensive systems and making meaningful improvements to threat detection capabilities.
 
